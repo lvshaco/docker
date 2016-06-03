@@ -9,14 +9,15 @@ RUN \
   make install && \
   cp -f src/redis-sentinel /usr/local/bin && \
   mkdir -p /etc/redis && \
+  mkdir -p /var/redis && \
   cp -f *.conf /etc/redis && \
   rm -rf /tmp/redis-stable* && \
   sed -i 's/^\(bind .*\)$/# \1/' /etc/redis/redis.conf && \
   sed -i 's/^\(daemonize .*\)$/# \1/' /etc/redis/redis.conf && \
-  sed -i 's/^\(dir .*\)$/# \1\ndir \/data/' /etc/redis/redis.conf && \
-  ln -sf /dev/stdout /data/redis.log
+  sed -i 's/^\(dir .*\)$/# \1\ndir \/var\/redis/' /etc/redis/redis.conf && \
+  ln -sf /dev/stdout /var/redis/redis.log
 
-VOLUME ["/data", "/data/redis.log"]
+VOLUME ["/var/redis"]
 
 CMD ["redis-server", "/etc/redis/redis.conf"]
 EXPOSE 6379
